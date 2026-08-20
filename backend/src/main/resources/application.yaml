@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: Taskly
+
+  datasource:
+    url: jdbc:postgresql://localhost:9010/tasklyDB-test
+    username: user_name
+    password: database_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+  ai:
+    openai:
+      api-key: add_api_key_of/openai/gemini/x..
+      base-url: add_url_those_plateform_api_use
+      chat:
+        options:
+          # model: x-ai/grok-code-fast-1
+          # model: google/gemini-3-flash-preview
+          model: openai/gpt-5.4-mini
+#          model: openai/gpt-oss-20b:free
+          temperature: 0.0
+
+jwt:
+  secret-key: add_keys
+
+
+stripe:
+  api:
+    secret: add_stripe_keys
+  webhook:
+    secret: add_webhook_secret_key
+
+
+client.url: http://localhost:8080
+
+logging:
+  level:
+    org.springframework.ai:
+      chat.client: DEBUG
+
+minio:
+  url: http://localhost:9000
+  access-key: access-key
+  secret-key: secret-key
+  project-bucket: projects
