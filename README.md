@@ -187,50 +187,11 @@ This provides the foundation for implementing usage-based AI billing and subscri
 
 ## 🏗️ System Architecture
 
-```text
-                         ┌──────────────────────┐
-                         │        User          │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │    React Frontend    │
-                         └──────────┬───────────┘
-                                    │
-                         REST API / SSE
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │   Spring Boot API    │
-                         └──────────┬───────────┘
-                                    │
-              ┌─────────────────────┼─────────────────────┐
-              │                     │                     │
-              ▼                     ▼                     ▼
-       ┌─────────────┐       ┌─────────────┐      ┌──────────────┐
-       │  Spring AI  │       │    Redis    │      │    Spring    │
-       │             │       │             │      │   Security   │
-       └──────┬──────┘       └─────────────┘      └──────────────┘
-              │
-              ▼
-       ┌──────────────┐
-       │   AI Model   │
-       └──────┬───────┘
-              │
-              ▼
-       Generated React Code
-              │
-              ▼
-       ┌──────────────────┐
-       │ Code Validation &│
-       │ Automatic Repair │
-       └────────┬─────────┘
-                │
-                ▼
-       ┌──────────────────┐
-       │  Live Preview    │
-       └──────────────────┘
-```
+
+<img width="741" height="570" alt="image" src="https://github.com/user-attachments/assets/67bd27d1-e1b8-4389-85be-da4df83c501a" />
+
+
+
 
 ---
 
