@@ -41,6 +41,13 @@ Real-Time Code Display
 This improves the perceived responsiveness of the application during AI generation.
 
 ---
+## 🖥️ Project Screenshots 
+<img width="1600" height="880" alt="2026-08-3 at 18 46 53 (2)" src="https://github.com/user-attachments/assets/978b945b-3a8b-4796-9169-3b0e283135a6" /> 
+<img width="1600" height="880" alt="2026-08-4 at 18 46 53 (1)" src="https://github.com/user-attachments/assets/6216fbc5-469d-4fb0-b573-4d7ded260f7d" />
+
+---
+
+
 
 ## 🖥️ Live Application Preview
 
