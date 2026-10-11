@@ -8,6 +8,7 @@ import { Globe, Link as LinkIcon, Lock, Check } from "lucide-react";
 import { api } from "@/lib/api";
 import { ProjectMember, ProjectRole } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
+import { useConfirm } from "@/components/ConfirmDialog";
 import { cn } from "@/lib/utils";
 
 interface ShareDialogProps {
@@ -19,6 +20,7 @@ interface ShareDialogProps {
 
 export function ShareDialog({ projectId, trigger, open, onOpenChange }: ShareDialogProps) {
     const { toast } = useToast();
+    const confirm = useConfirm();
     const [members, setMembers] = useState<ProjectMember[]>([]);
     const [inviteEmail, setInviteEmail] = useState("");
     const [inviteRole, setInviteRole] = useState<ProjectRole>("EDITOR");
@@ -78,6 +80,15 @@ export function ShareDialog({ projectId, trigger, open, onOpenChange }: ShareDia
     };
 
     const handleRemoveMember = async (userId: number) => {
+        const member = members.find((m) => m.userId === userId);
+        const ok = await confirm({
+            title: `Remove ${member?.name || member?.username || "this member"}?`,
+            description: "They'll lose access to this project immediately. You can invite them again later.",
+            confirmText: "Remove",
+            destructive: true,
+        });
+        if (!ok) return;
+
         try {
             await api.removeMember(projectId, userId);
             setMembers(members.filter(m => m.userId !== userId));
@@ -160,7 +171,7 @@ export function ShareDialog({ projectId, trigger, open, onOpenChange }: ShareDia
                                         <span className="text-xs text-muted-foreground px-2 whitespace-nowrap">Owner</span>
                                     ) : (
                                         <Select
-                                            defaultValue={member.role}
+                                            value={member.role}
                                             onValueChange={(val) => {
                                                 if (val === 'REMOVE') handleRemoveMember(member.userId);
                                                 else handleRoleChange(member.userId, val as ProjectRole);

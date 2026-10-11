@@ -26,7 +26,7 @@ export function RuntimeErrorAlert({ error, onDismiss, onFix }: RuntimeErrorAlert
 
     return (
         <div className="absolute bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-            <div className="w-[400px] bg-[#1e1e20] border border-red-500/20 rounded-xl shadow-2xl overflow-hidden">
+            <div className="w-[400px] max-w-[calc(100vw-2rem)] bg-popover border border-red-500/20 rounded-xl shadow-2xl overflow-hidden">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 bg-red-500/10 border-b border-red-500/10">
                     <div className="flex items-center gap-3">
@@ -79,7 +79,7 @@ export function RuntimeErrorAlert({ error, onDismiss, onFix }: RuntimeErrorAlert
                     {/* Stack Trace (Expanded) */}
                     {isExpanded && error.stack && (
                         <div className="mt-4 pl-6">
-                            <div className="p-3 bg-black/30 rounded-lg border border-zinc-800/50">
+                            <div className="p-3 bg-black/30 rounded-lg border border-border/50">
                                 <pre className="text-[10px] text-zinc-500 whitespace-pre-wrap font-mono overflow-auto max-h-[200px]">
                                     {error.stack}
                                 </pre>
@@ -89,7 +89,7 @@ export function RuntimeErrorAlert({ error, onDismiss, onFix }: RuntimeErrorAlert
                 </div>
 
                 {/* Footer */}
-                <div className="p-3 bg-[#27272a] flex items-center justify-between border-t border-zinc-800">
+                <div className="p-3 bg-card flex items-center justify-between border-t border-border">
                     <div className="flex items-center gap-3 text-xs text-zinc-500 px-2">
                         <button onClick={onDismiss} className="hover:text-zinc-300 transition-colors">
                             Dismiss
@@ -99,11 +99,11 @@ export function RuntimeErrorAlert({ error, onDismiss, onFix }: RuntimeErrorAlert
                     <Button
                         size="sm"
                         onClick={() => onFix(error)}
-                        className="bg-blue-600 hover:bg-blue-500 text-white border-none h-8 px-4 text-xs font-medium gap-2 shadow-lg shadow-blue-900/20"
+                        className="h-8 px-4 text-xs font-medium gap-2"
                     >
                         <Wrench className="w-3.5 h-3.5" />
                         Fix issues
-                        <kbd className="hidden sm:inline-flex h-4 items-center gap-1 rounded border border-blue-400/30 bg-blue-500/20 px-1 font-mono text-[9px] font-medium text-blue-100 opacity-100">
+                        <kbd className="hidden sm:inline-flex h-4 items-center gap-1 rounded border border-black/15 bg-black/5 px-1 font-mono text-[9px] font-medium opacity-70">
                             F
                         </kbd>
                     </Button>

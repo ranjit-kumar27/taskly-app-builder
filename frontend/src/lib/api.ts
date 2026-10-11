@@ -2,6 +2,9 @@ import { ChatMessage, DeployResponse, FileNode, LoginCredentials, LoginResponse,
 
 const BASE_URL = "http://localhost:8080";
 
+/** A generation failure reported by the backend (readable message, safe to show the user). */
+class StreamError extends Error {}
+
 export const getAuthToken = () => localStorage.getItem("auth_token");
 
 export const setAuthToken = (token: string) => localStorage.setItem("auth_token", token);
@@ -163,7 +166,8 @@ export const api = {
     });
 
     if (!response.ok) {
-      throw new Error("Deployment failed");
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.message || "Deployment failed");
     }
 
     return response.json();
@@ -333,6 +337,9 @@ export const api = {
         let fullContentBuffer = ""; // To accumulate clean text for file regex
         let lastProcessedIndex = 0; // Optimization for regex
 
+        let eventName = ""; // SSE "event:" applies to the data lines that follow it
+        let streamError = ""; // set by an "error" event; reported once the server closes the stream
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -346,7 +353,9 @@ export const api = {
 
           for (const line of lines) {
             const trimmedLine = line.trim();
-            if (!trimmedLine || !trimmedLine.startsWith("data:")) continue;
+            if (!trimmedLine) { eventName = ""; continue; } // blank line ends an SSE event
+            if (trimmedLine.startsWith("event:")) { eventName = trimmedLine.slice(6).trim(); continue; }
+            if (!trimmedLine.startsWith("data:")) continue;
 
             const dataStr = trimmedLine.slice(5).trim();
             if (!dataStr) continue;
@@ -356,6 +365,12 @@ export const api = {
               const parsed = JSON.parse(dataStr);
               const content = parsed.text;
 
+              // Backend reports generation failures as an "error" event carrying a readable message
+              if (eventName === "error") {
+                streamError = content || "Generation failed";
+                continue;
+              }
+
               // 1. Send clean text to UI
               onChunk(content);
 
@@ -364,11 +379,13 @@ export const api = {
               // ... (rest of regex logic) ...
 
             } catch (e) {
+
               console.error("Failed to parse SSE JSON:", e);
             }
           }
         }
 
+        if (streamError) throw new StreamError(streamError);
         onComplete();
       })
       .catch((error) => {

@@ -2,10 +2,15 @@ spring:
   application:
     name: Taskly
 
+  # Secrets live in backend/.env (gitignored; copy .env.example to start).
+  # Real environment variables override values from the file.
+  config:
+    import: optional:file:.env[.properties]
+
   datasource:
-    url: jdbc:postgresql://localhost:9010/tasklyDB-test
-    username: user_name
-    password: database_password
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -25,25 +30,22 @@ spring:
 
   ai:
     openai:
-      api-key: add_api_key_of/openai/gemini/x..
-      base-url: add_url_those_plateform_api_use
+      api-key: ${AI_API_KEY}
+      base-url: ${AI_BASE_URL}
       chat:
         options:
-          # model: x-ai/grok-code-fast-1
-          # model: google/gemini-3-flash-preview
-          model: openai/gpt-5.4-mini
-#          model: openai/gpt-oss-20b:free
+          model: ${AI_MODEL}
           temperature: 0.0
 
 jwt:
-  secret-key: add_keys
+  secret-key: ${JWT_SECRET}
 
 
 stripe:
   api:
-    secret: add_stripe_keys
+    secret: ${STRIPE_SECRET_KEY}
   webhook:
-    secret: add_webhook_secret_key
+    secret: ${STRIPE_WEBHOOK_SECRET}
 
 
 client.url: http://localhost:8080
@@ -53,8 +55,12 @@ logging:
     org.springframework.ai:
       chat.client: DEBUG
 
+preview:
+  # local = run `npm run dev` on this machine; kubernetes = runner pods in the shuttle-apps namespace
+  mode: ${PREVIEW_MODE:local}
+
 minio:
-  url: http://localhost:9000
-  access-key: access-key
-  secret-key: secret-key
+  url: ${MINIO_URL}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
   project-bucket: projects

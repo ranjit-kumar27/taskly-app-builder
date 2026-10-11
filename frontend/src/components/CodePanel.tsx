@@ -162,7 +162,7 @@ export function CodePanel({ projectId, updatedFiles }: CodePanelProps) {
   return (
     <div className="flex h-full">
       {/* File Tree */}
-      <div className="w-56 shrink-0 border-r border-border/50 overflow-y-auto bg-panel">
+      <div className="w-36 shrink-0 border-r border-white/[0.06] overflow-y-auto sm:w-56">
         <div className="panel-header">
           <span className="text-sm font-medium">Files</span>
         </div>

@@ -8,7 +8,9 @@ import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -16,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@ConditionalOnProperty(name = "preview.mode", havingValue = "kubernetes")
 @RequiredArgsConstructor
 @Slf4j
 public class KubernetesDeploymentServiceImpl implements DeploymentService {
@@ -34,6 +37,7 @@ public class KubernetesDeploymentServiceImpl implements DeploymentService {
 
 
     @Override
+    @PreAuthorize("@security.canViewProject(#projectId)")
     public DeployResponse deploy(Long projectId) {
 
         String domain = "project-" + projectId + ".app.domain.com";

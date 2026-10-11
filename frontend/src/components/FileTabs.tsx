@@ -34,7 +34,7 @@ export function FileTabs({ openTabs, activeTab, onSelectTab, onCloseTab }: FileT
   if (openTabs.length === 0) return null;
 
   return (
-    <div className="flex items-center border-b border-border/50 bg-panel overflow-x-auto">
+    <div className="flex items-center border-b border-white/[0.06] overflow-x-auto">
       {openTabs.map((path) => (
         <div
           key={path}

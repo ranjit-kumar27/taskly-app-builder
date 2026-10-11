@@ -5,9 +5,10 @@ services:
     image: pgvector/pgvector:0.8.1-pg18-trixie
     container_name: Taskly-db
     environment:
+      # Credentials come from backend/.env (docker compose loads it automatically)
       POSTGRES_DB: tasklyDB-test
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "9010:5432"
     volumes:
@@ -15,17 +16,23 @@ services:
     restart: unless-stopped
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: bitnamilegacy/minio:latest # quay.io/minio and minio/minio images are no longer public
     container_name: minio-taskly
-    command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin123
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     ports:
       - "9000:9000"    # API
       - "9001:9001"    # Console
     volumes:
-      - minio-data:/data
+      - minio-data:/bitnami/minio/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-taskly
+    ports:
+      - "6379:6379"
     restart: unless-stopped
 
 volumes:
